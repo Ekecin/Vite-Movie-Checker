@@ -1,0 +1,248 @@
+
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      padding: 2rem;
+      padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { color: var(--accent); margin-bottom: 1rem; }
+
+    /* Controls Section */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    input, select, button {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus, select:focus { border-color: var(--accent); }
+    button {
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    button:hover { background: var(--accent-hover); color: white; }
+
+    /* Movie Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    .rating { color: #f59e0b; font-weight: bold; }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+    .modal.active { display: flex; }
+
+    .modal-content {
+      background: var(--card-bg);
+      max-width: 700px;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 600px) {
+      .modal-content { flex-direction: row; }
+      .modal-content .modal-media { width: 40%; }
+      .modal-details { width: 60%; }
+    }
+
+    .modal-media {
+      position: relative;
+      background: #000;
+      min-height: 220px;
+    }
+    .modal-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .modal-media iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+    }
+
+    .trailer-btn {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.75);
+      color: var(--accent);
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid var(--accent);
+    }
+    .trailer-btn:hover { background: var(--accent); color: #0f172a; }
+
+    .no-trailer-note {
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Skeleton loading state */
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton-shimmer {
+      background: linear-gradient(90deg, var(--card-bg) 25%, #334155 37%, var(--card-bg) 63%);
+      background-size: 800px 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+    }
+    .skeleton-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .skeleton-poster {
+      width: 100%;
+      height: 300px;
+    }
+    .skeleton-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .skeleton-line {
+      height: 0.9rem;
+      border-radius: 4px;
+    }
+    .skeleton-line.short { width: 40%; }
+    .skeleton-line.title { width: 80%; height: 1.1rem; }
+
+    .skeleton-modal-line {
+      height: 0.9rem;
+      border-radius: 4px;
+      margin-bottom: 0.7rem;
+    }
+    .skeleton-modal-line.title { width: 60%; height: 1.4rem; }
+    .skeleton-modal-line.tagline { width: 45%; }
+    .skeleton-modal-line.full { width: 100%; }
+    .skeleton-modal-line.mid { width: 90%; }
+    .skeleton-modal-line.short { width: 30%; }
+
+    .modal-details { padding: 1.5rem; }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: rgba(255, 11, 35, 0.5);
+      border: none;
+      color: rgb(255, 254, 254);
+      font-size: 1.5rem;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+  justify-content: center;
+  align-items: center;
+    }
