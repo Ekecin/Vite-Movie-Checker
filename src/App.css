@@ -20,6 +20,8 @@
   --font-display: "Bricolage Grotesque", system-ui, -apple-system, sans-serif;
   --font-body: "Instrument Sans", system-ui, -apple-system, sans-serif;
 
+  color-scheme: dark;
+
   --poster-h: 300px;
   --notch: 11px;
   --radius: 14px;
@@ -62,6 +64,21 @@ body {
 .container {
   max-width: 1240px;
   margin: 0 auto;
+}
+
+/* Undo the leftover Vite-template #root layout from index.css */
+#root {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  border-inline: none;
+  min-height: 0;
+  display: block;
+}
+
+.container > p {
+  color: var(--text-sub);
 }
 
 /* ==========================================================
@@ -382,6 +399,8 @@ select:focus-visible {
 }
 
 .modal-media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -389,12 +408,13 @@ select:focus-visible {
 }
 
 .modal-media iframe {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 220px;
-  aspect-ratio: 16 / 9;
   border: none;
+  background: #000;
 }
 
 /* Close button: the bare <button> inside .modal-content, plus .close-btn */
@@ -461,7 +481,6 @@ select:focus-visible {
 }
 
 /* first paragraph after the title = tagline */
-.modal-details h2 + p,
 .modal-details .modal-tagline {
   color: var(--text-sub);
   font-style: italic;
@@ -495,6 +514,22 @@ select:focus-visible {
   }
 }
 
+/* While a trailer plays: stack it as a wide 16:9 player */
+.modal-content.playing {
+  flex-direction: column;
+}
+
+.modal-content.playing .modal-media {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+}
+
+.modal-content.playing .modal-details {
+  width: 100%;
+}
+
 /* Trailer button + note (used if you add trailers) */
 .trailer-btn {
   position: absolute;
@@ -519,7 +554,7 @@ select:focus-visible {
   color: #1a1024;
 }
 
-.no-trailer-note {
+.modal-details .no-trailer-note {
   margin-top: 0.5rem;
   color: var(--text-sub);
   font-size: 0.85rem;
