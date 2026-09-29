@@ -1,248 +1,585 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap");
 
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --accent: #38bdf8;
-      --accent-hover: #0284c7;
-    }
+/* ==========================================================
+   Design tokens
+   Concept: every movie is a cinema ticket stub. Poster on top,
+   perforated tear line, details underneath.
+   ========================================================== */
+:root {
+  --night: #150f24;
+  --night-raised: #1d1531;
+  --ticket: #271c3f;
+  --ticket-hi: #33254f;
+  --line: rgba(255, 255, 255, 0.09);
+  --text-main: #f3eefc;
+  --text-sub: #a79cc4;
+  --amber: #ffb547;
+  --amber-deep: #f29a1f;
+  --rose: #ff5d7a;
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-main);
-      padding: 2rem;
-      padding-top: calc(2rem + env(safe-area-inset-top, 0px));
-      padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
-    }
+  --font-display: "Bricolage Grotesque", system-ui, -apple-system, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, sans-serif;
 
-    .container { max-width: 1200px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 2rem; }
-    h1 { color: var(--accent); margin-bottom: 1rem; }
+  --poster-h: 300px;
+  --notch: 11px;
+  --radius: 14px;
+}
 
-    /* Controls Section */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      justify-content: center;
-    }
+/* ==========================================================
+   Base
+   ========================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    input, select, button {
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: var(--card-bg);
-      color: var(--text-main);
-      font-size: 1rem;
-      outline: none;
-    }
+::selection {
+  background: var(--amber);
+  color: #1a1024;
+}
 
-    input:focus, select:focus { border-color: var(--accent); }
-    button {
-      background: var(--accent);
-      color: #0f172a;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: background 0.2s;
-    }
-    button:hover { background: var(--accent-hover); color: white; }
+html {
+  scrollbar-color: var(--ticket-hi) var(--night);
+  scrollbar-width: thin;
+}
 
-    /* Movie Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-main);
+  background:
+    radial-gradient(60rem 30rem at 88% -8%, rgba(255, 181, 71, 0.14), transparent 62%),
+    radial-gradient(48rem 28rem at 0% 0%, rgba(120, 90, 220, 0.2), transparent 60%),
+    var(--night);
+  padding: 2rem;
+  padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+}
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
 
-    .card img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      background: #000;
-    }
+/* ==========================================================
+   Header
+   ========================================================== */
+header {
+  text-align: left;
+  margin-bottom: 1.75rem;
+}
 
-    .card-body {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 5.5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
 
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+header p {
+  color: var(--text-sub);
+  max-width: 52ch;
+}
 
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-sub);
-      font-size: 0.9rem;
-      margin-top: auto;
-    }
+/* ==========================================================
+   Controls (search / genre / year / button)
+   ========================================================== */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 2.25rem;
+  background: var(--night-raised);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  justify-content: flex-start;
+}
 
-    .rating { color: #f59e0b; font-weight: bold; }
+input,
+select,
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      z-index: 1000;
-    }
-    .modal.active { display: flex; }
+input::placeholder {
+  color: var(--text-sub);
+  opacity: 0.85;
+}
 
-    .modal-content {
-      background: var(--card-bg);
-      max-width: 700px;
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
+input:hover,
+select:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
 
-    @media (min-width: 600px) {
-      .modal-content { flex-direction: row; }
-      .modal-content .modal-media { width: 40%; }
-      .modal-details { width: 60%; }
-    }
+input:focus,
+select:focus {
+  border-color: var(--amber);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 181, 71, 0.2);
+}
 
-    .modal-media {
-      position: relative;
-      background: #000;
-      min-height: 220px;
-    }
-    .modal-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .modal-media iframe {
-      width: 100%;
-      height: 100%;
-      min-height: 220px;
-      aspect-ratio: 16 / 9;
-      border: none;
-      display: block;
-    }
+.controls input[type="text"],
+.controls input:not([type]),
+.controls input[type="search"] {
+  flex: 1 1 260px;
+  min-width: 0;
+}
 
-    .trailer-btn {
-      position: absolute;
-      inset: 0;
-      margin: auto;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: rgba(15, 23, 42, 0.75);
-      color: var(--accent);
-      font-size: 1.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border: 2px solid var(--accent);
-    }
-    .trailer-btn:hover { background: var(--accent); color: #0f172a; }
+.controls select {
+  flex: 0 1 190px;
+  min-width: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.5rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1.5l6 6 6-6' stroke='%23a79cc4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
 
-    .no-trailer-note {
-      color: var(--text-sub);
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-    }
+.controls select option {
+  background: var(--night-raised);
+  color: var(--text-main);
+}
 
-    /* Skeleton loading state */
-    @keyframes shimmer {
-      0% { background-position: -400px 0; }
-      100% { background-position: 400px 0; }
-    }
-    .skeleton-shimmer {
-      background: linear-gradient(90deg, var(--card-bg) 25%, #334155 37%, var(--card-bg) 63%);
-      background-size: 800px 100%;
-      animation: shimmer 1.4s ease-in-out infinite;
-    }
-    .skeleton-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .skeleton-poster {
-      width: 100%;
-      height: 300px;
-    }
-    .skeleton-body {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    .skeleton-line {
-      height: 0.9rem;
-      border-radius: 4px;
-    }
-    .skeleton-line.short { width: 40%; }
-    .skeleton-line.title { width: 80%; height: 1.1rem; }
+.controls input[type="number"] {
+  flex: 0 1 110px;
+  min-width: 90px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
 
-    .skeleton-modal-line {
-      height: 0.9rem;
-      border-radius: 4px;
-      margin-bottom: 0.7rem;
-    }
-    .skeleton-modal-line.title { width: 60%; height: 1.4rem; }
-    .skeleton-modal-line.tagline { width: 45%; }
-    .skeleton-modal-line.full { width: 100%; }
-    .skeleton-modal-line.mid { width: 90%; }
-    .skeleton-modal-line.short { width: 30%; }
+.controls input[type="number"]::-webkit-outer-spin-button,
+.controls input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
-    .modal-details { padding: 1.5rem; }
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background: rgba(255, 11, 35, 0.5);
-      border: none;
-      color: rgb(255, 254, 254);
-      font-size: 1.5rem;
-      line-height: 1;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 2;
-      display: flex;
+button {
+  background: var(--amber);
+  color: #1a1024;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+
+button:hover {
+  background: var(--amber-deep);
+  color: #1a1024;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+@media (max-width: 599px) {
+  body {
+    padding: 1rem;
+    padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .controls select,
+  .controls input[type="number"],
+  .controls button {
+    flex: 1 1 100%;
+  }
+}
+
+/* ==========================================================
+   Movie grid
+   ========================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.75rem 1.5rem;
+}
+
+/* ==========================================================
+   Movie card = ticket stub
+   Two half-circle notches are cut out at the tear line.
+   ========================================================== */
+.card,
+.skeleton-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--ticket-hi) 0%, var(--ticket) 45%);
+
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 var(--poster-h), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--poster-h), #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 var(--poster-h), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--poster-h), #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+.card {
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card img {
+  display: block;
+  width: 100%;
+  height: var(--poster-h);
+  object-fit: cover;
+  background: var(--night);
+  transition: filter 0.25s, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover img {
+  filter: brightness(1.08) saturate(1.1);
+}
+
+.card-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1.35rem 1.1rem 1.05rem;
+}
+
+/* the tear line */
+.card-body::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: calc(var(--notch) + 8px);
+  right: calc(var(--notch) + 8px);
+  border-top: 2px dashed rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  color: var(--text-sub);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rating {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 181, 71, 0.14);
+  color: var(--amber);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================
+   Modal
+   Markup used: .modal > .modal-content > (button, img, .modal-details)
+   ========================================================== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
   justify-content: center;
   align-items: center;
-    }
+  padding: 1rem;
+  background: rgba(10, 6, 20, 0.78);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.modal.active {
+  display: flex;
+  animation: modal-fade 0.2s ease-out;
+}
+
+.modal.active .modal-content {
+  animation: modal-rise 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: linear-gradient(180deg, var(--ticket-hi), var(--ticket) 40%);
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ticket-hi) transparent;
+}
+
+/* Poster (direct child of .modal-content) and optional .modal-media wrapper */
+.modal-content > img,
+.modal-media {
+  display: block;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  background: var(--night);
+}
+
+.modal-media {
+  position: relative;
+  min-height: 220px;
+}
+
+.modal-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-media iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+/* Close button: the bare <button> inside .modal-content, plus .close-btn */
+.modal-content > button,
+.close-btn {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(21, 15, 36, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--text-main);
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-content > button:hover,
+.close-btn:hover {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #fff;
+}
+
+/* Details */
+.modal-details {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.modal-details h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+  padding-right: 2.5rem;
+}
+
+.modal-details p {
+  color: var(--text-main);
+  font-size: 0.97rem;
+  line-height: 1.65;
+  margin-bottom: 0.6rem;
+  max-width: 62ch;
+}
+
+.modal-details p strong {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* first paragraph after the title = tagline */
+.modal-details h2 + p,
+.modal-details .modal-tagline {
+  color: var(--text-sub);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.14);
+}
+
+.modal-details .modal-overview {
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 600px) {
+  .modal-content {
+    flex-direction: row;
+  }
+
+  .modal-content > img,
+  .modal-content .modal-media {
+    width: 40%;
+    height: auto;
+    min-height: 380px;
+    flex-shrink: 0;
+  }
+
+  .modal-details {
+    width: 60%;
+    padding: 2rem 2rem 2.25rem;
+    justify-content: center;
+  }
+}
+
+/* Trailer button + note (used if you add trailers) */
+.trailer-btn {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid var(--amber);
+  background: rgba(21, 15, 36, 0.75);
+  color: var(--amber);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.trailer-btn:hover {
+  background: var(--amber);
+  color: #1a1024;
+}
+
+.no-trailer-note {
+  margin-top: 0.5rem;
+  color: var(--text-sub);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================
+   Skeleton loading
+   ========================================================== */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, var(--ticket) 25%, var(--ticket-hi) 37%, var(--ticket) 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-poster {
+  width: 100%;
+  height: var(--poster-h);
+}
+
+.skeleton-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.35rem 1.1rem 1.05rem;
+}
+
+.skeleton-line {
+  height: 0.9rem;
+  border-radius: 4px;
+}
+
+.skeleton-line.short { width: 40%; }
+.skeleton-line.title { width: 80%; height: 1.1rem; }
+
+.skeleton-modal-line {
+  height: 0.9rem;
+  border-radius: 4px;
+  margin-bottom: 0.7rem;
+}
+
+.skeleton-modal-line.title { width: 60%; height: 1.4rem; }
+.skeleton-modal-line.tagline { width: 45%; }
+.skeleton-modal-line.full { width: 100%; }
+.skeleton-modal-line.mid { width: 90%; }
+.skeleton-modal-line.short { width: 30%; }
+
+/* ==========================================================
+   Reduced motion
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
